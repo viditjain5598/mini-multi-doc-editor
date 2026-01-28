@@ -3,6 +3,7 @@
 ## Architecture Overview
 
 The application follows a client-server architecture with WebSocket-based real-time communication
+<img width="669" height="457" alt="Screenshot 2026-01-28 at 14 26 20" src="https://github.com/user-attachments/assets/8f1d1ade-c727-4987-91d9-ca45e6d56e3d" />
 
 ## Tech Choices and Trade-offs
 
