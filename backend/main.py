@@ -28,9 +28,10 @@ class ConnectionManager:
         async with self.lock:
             self.active_connections[user_id] = websocket
 
-    def disconnect(self, user_id: str):
-        if user_id in self.active_connections:
-            del self.active_connections[user_id]
+    async def disconnect(self, user_id: str):
+        async with self.lock:
+            if user_id in self.active_connections:
+                del self.active_connections[user_id]
 
     def get_users(self) -> list[str]:
         return list(self.active_connections.keys())
