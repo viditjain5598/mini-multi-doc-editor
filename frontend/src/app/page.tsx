@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
 import { Editor } from '@/components/Editor';
 import { PresenceBar } from '@/components/PresenceBar';
@@ -23,19 +23,7 @@ function generateRandomName(): string {
   return `${adjective} ${animal}`;
 }
 
-export default function Home() {
-  const userId = useMemo(() => {
-    if (typeof window !== 'undefined') {
-      const stored = sessionStorage.getItem('collab-editor-user-name');
-      if (stored) return stored;
-
-      const newName = generateRandomName();
-      sessionStorage.setItem('collab-editor-user-name', newName);
-      return newName;
-    }
-    return generateRandomName();
-  }, []);
-
+function EditorContent({ userId }: { userId: string }) {
   const {
     content,
     users,
@@ -72,4 +60,29 @@ export default function Home() {
       />
     </main>
   );
+}
+
+export default function Home() {
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const stored = sessionStorage.getItem('collab-editor-user-name');
+    if (stored) {
+      setUserId(stored);
+    } else {
+      const newName = generateRandomName();
+      sessionStorage.setItem('collab-editor-user-name', newName);
+      setUserId(newName);
+    }
+  }, []);
+
+  if (!userId) {
+    return (
+      <main className="flex flex-col h-screen bg-gray-50 dark:bg-gray-900 items-center justify-center">
+        <div className="text-gray-500 dark:text-gray-400">Loading...</div>
+      </main>
+    );
+  }
+
+  return <EditorContent userId={userId} />;
 }
